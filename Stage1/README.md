@@ -28,4 +28,4 @@ java Stage1 <width> <height>
 
 Pretty simple - just run the above command with a width and a height and it generates a maze. Admittedly,
 the maze is almost always solved by just going down and to the right, with maybe some small twists along
-the way. If you want to see a better command-line maze project, check out my [ncurses-based maze project](evan1026/ncurses-maze).
+the way. If you want to see a better command-line maze project, check out my [ncurses-based maze project](http://github.com/evan1026/ncurses-maze).
