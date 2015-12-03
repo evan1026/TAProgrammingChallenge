@@ -36,7 +36,7 @@ public class GraphTraverser {
         while (!nwun.isEmpty()) {
             ArrayList<Node> nextNwun = new ArrayList<Node>();
             for (Node n : nwun) {
-                unknownNodes.add(n);
+                if (!unknownNodes.contains(n)) unknownNodes.add(n);
                 
                 for (Node m : n.getEdges()) {
                     if (!unknownNodes.contains(m) && !nextNwun.contains(m)) {
@@ -55,7 +55,7 @@ public class GraphTraverser {
             return pos;
         
         if (!currentPath.isEmpty()) {
-            //System.out.println("On the way to " + currentPath.get(currentPath.size() - 1));
+            System.out.println("On the way to " + currentPath.get(currentPath.size() - 1));
             Position p = currentPath.get(0);
             currentPath.remove(0);
             return p;
@@ -68,11 +68,15 @@ public class GraphTraverser {
             
             return getNextMove(); //Just so I don't have to copy/paste what's above
         }
-        
-        return null;
+
+        //At this point, we've been to every reachable square, yet we're not
+        //  done.... so I guess we'll just stay where we are
+        return pos;
     }
     
     public void doMove(Position p) {
+        Point prevStringPos = pos.toPoint();
+        graph.renderedMaze[prevStringPos.y] = graph.renderedMaze[prevStringPos.y].substring(0, prevStringPos.x) + "*" + graph.renderedMaze[prevStringPos.y].substring(prevStringPos.x + 1);
         pos = p;
         /*for (Node n : graph.getNode(pos).getEdges()) {
             n.t = Node.Type.EMPTY;
@@ -80,15 +84,18 @@ public class GraphTraverser {
             graph.renderedMaze[stringPos.y] = graph.renderedMaze[stringPos.y].substring(0, stringPos.x) + "*" + graph.renderedMaze[stringPos.y].substring(stringPos.x + 1);
             unknownNodes.remove(graph.getNode(n.pos));
         }*/
-        graph.getNode(pos).t = Node.Type.EMPTY;
-        unknownNodes.remove(graph.getNode(pos));
+        try {
+            graph.getNode(pos).t = Node.Type.EMPTY;
+            unknownNodes.remove(graph.getNode(pos));
         
-        Point stringPos = pos.toPoint();
-        graph.renderedMaze[stringPos.y] = graph.renderedMaze[stringPos.y].substring(0, stringPos.x) + "#" + graph.renderedMaze[stringPos.y].substring(stringPos.x + 1);
-        
-        /*for (String s : graph.renderedMaze) {
+            Point stringPos = pos.toPoint();
+            graph.renderedMaze[stringPos.y] = graph.renderedMaze[stringPos.y].substring(0, stringPos.x) + "#" + graph.renderedMaze[stringPos.y].substring(stringPos.x + 1);
+        } catch (Exception e) {
+            System.out.println("Null for pos " + pos);
+        }
+        for (String s : graph.renderedMaze) {
             System.out.println(s);
-        }*/
+        }
     }
     
     public boolean hasNextMove() {
